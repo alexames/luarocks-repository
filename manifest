@@ -2,12 +2,12 @@ commands = {}
 modules = {}
 repository = {
    llx = {
-      ["scm-1"] = {
+      ["1.0.0-1"] = {
          {
             arch = "rockspec"
          }
       },
-      ["1.0.0-1"] = {
+      ["scm-1"] = {
          {
             arch = "rockspec"
          }
