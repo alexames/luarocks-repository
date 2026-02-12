@@ -1,0 +1,68 @@
+name: Publish
+
+on:
+  workflow_call:
+    inputs:
+      package-name:
+        description: 'The luarocks package name (e.g. llx, lua-midi, musica)'
+        required: true
+        type: string
+    secrets:
+      REPO_ACCESS_TOKEN:
+        required: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    concurrency:
+      group: luarocks-publish
+      cancel-in-progress: false
+
+    steps:
+    - name: Checkout source repository
+      uses: actions/checkout@v4
+
+    - name: Checkout luarocks-repository
+      uses: actions/checkout@v4
+      with:
+        repository: alexames/luarocks-repository
+        path: luarocks-repository
+        token: ${{ secrets.REPO_ACCESS_TOKEN }}
+
+    - name: Install LuaRocks
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y luarocks
+
+    - name: Copy SCM rockspec
+      run: cp ${{ inputs.package-name }}-scm-1.rockspec luarocks-repository/
+
+    - name: Generate versioned rockspec
+      if: startsWith(github.ref, 'refs/tags/v')
+      run: |
+        VERSION="${GITHUB_REF#refs/tags/v}"
+        sed -e "s/version = \"scm-1\"/version = \"${VERSION}-1\"/" \
+            -e "s/branch = \"main\"/tag = \"v${VERSION}\"/" \
+            ${{ inputs.package-name }}-scm-1.rockspec > "luarocks-repository/${{ inputs.package-name }}-${VERSION}-1.rockspec"
+
+    - name: Regenerate manifests
+      working-directory: luarocks-repository
+      run: luarocks-admin make-manifest .
+
+    - name: Commit and push
+      working-directory: luarocks-repository
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add -A
+        git diff --cached --quiet && echo "No changes to publish" && exit 0
+        if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+          VERSION="${GITHUB_REF#refs/tags/v}"
+          git commit -m "Publish ${{ inputs.package-name }} ${VERSION}"
+        else
+          git commit -m "Update ${{ inputs.package-name }} scm rockspec"
+        fi
+        git pull --rebase
+        git push
