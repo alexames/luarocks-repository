@@ -8,6 +8,11 @@ on:
         required: false
         type: string
         default: ''
+      exclude-tests:
+        description: 'Space-separated test file basenames to skip (e.g. test_foo test_bar)'
+        required: false
+        type: string
+        default: ''
 
 jobs:
   test:
@@ -38,7 +43,13 @@ jobs:
       run: |
         eval "$(luarocks path --lua-version 5.4)"
         cd tests
+        EXCLUDE="${{ inputs.exclude-tests }}"
         find . -name 'test_*.lua' -type f | sort | while IFS= read -r test_file; do
+          basename="$(basename "$test_file" .lua)"
+          if echo " $EXCLUDE " | grep -q " $basename "; then
+            echo "Skipping $test_file (excluded)"
+            continue
+          fi
           echo "Running $test_file..."
           lua5.4 "$test_file" || exit 1
         done
