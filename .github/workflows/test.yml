@@ -32,7 +32,7 @@ jobs:
         done
 
     - name: Install package locally
-      run: luarocks make --local --lua-version 5.4
+      run: luarocks make --local --lua-version 5.4 --deps-mode=none
 
     - name: Run all tests
       run: |

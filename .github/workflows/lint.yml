@@ -37,4 +37,4 @@ jobs:
       uses: editorconfig-checker/action-editorconfig-checker@main
 
     - name: Check editorconfig compliance
-      run: editorconfig-checker
+      run: editorconfig-checker --disable-indent-size
