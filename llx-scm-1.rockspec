@@ -3,7 +3,7 @@ package = "llx"
 version = "scm-1"
 
 source = {
-   url = "git://github.com/alexames/llx.git",
+   url = "git+https://github.com/alexames/llx.git",
    branch = "main",
 }
 
@@ -30,7 +30,7 @@ schema validation, exception handling, unit testing, and more.
 }
 
 dependencies = {
-   "lua >= 5.4",
+   "lua >= 5.3",
 }
 
 test = {
@@ -45,11 +45,20 @@ build = {
       ["llx"] = "src/init.lua",
 
       -- Core modules
+      ["llx.bisect"] = "src/bisect.lua",
       ["llx.cache"] = "src/cache.lua",
       ["llx.check_arguments"] = "src/check_arguments.lua",
       ["llx.class"] = "src/class.lua",
+      ["llx.collections"] = "src/collections/init.lua",
+      ["llx.collections.counter"] = "src/collections/counter.lua",
+      ["llx.collections.default_dict"] = "src/collections/default_dict.lua",
+      ["llx.collections.deque"] = "src/collections/deque.lua",
+      ["llx.collections.heap"] = "src/collections/heap.lua",
+      ["llx.collections.ordered_dict"] = "src/collections/ordered_dict.lua",
+      ["llx.contextlib"] = "src/contextlib.lua",
       ["llx.core"] = "src/core.lua",
       ["llx.coroutine"] = "src/coroutine.lua",
+      ["llx.dataclass"] = "src/dataclass.lua",
       ["llx.decorator"] = "src/decorator.lua",
       ["llx.enum"] = "src/enum.lua",
       ["llx.environment"] = "src/environment.lua",
@@ -62,11 +71,16 @@ build = {
       ["llx.isinstance"] = "src/isinstance.lua",
       ["llx.mathx"] = "src/mathx.lua",
       ["llx.method"] = "src/method.lua",
+      ["llx.namedtuple"] = "src/namedtuple.lua",
       ["llx.operators"] = "src/operators.lua",
+      ["llx.path"] = "src/path.lua",
+      ["llx.pretty"] = "src/pretty.lua",
       ["llx.property"] = "src/property.lua",
       ["llx.proxy"] = "src/proxy.lua",
       ["llx.repr"] = "src/repr.lua",
+      ["llx.result"] = "src/result.lua",
       ["llx.schema"] = "src/schema.lua",
+      ["llx.seq"] = "src/seq.lua",
       ["llx.signature"] = "src/signature.lua",
       ["llx.string_view"] = "src/string_view.lua",
       ["llx.tointeger"] = "src/tointeger.lua",
@@ -85,6 +99,7 @@ build = {
 
       -- exceptions submodule
       ["llx.exceptions"] = "src/exceptions/init.lua",
+      ["llx.exceptions.attribute_error"] = "src/exceptions/attribute_error.lua",
       ["llx.exceptions.exception"] = "src/exceptions/exception.lua",
       ["llx.exceptions.exception_group"] = "src/exceptions/exception_group.lua",
       ["llx.exceptions.index_error"] = "src/exceptions/index_error.lua",
