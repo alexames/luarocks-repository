@@ -3,7 +3,7 @@ package = "musica"
 version = "0.1.0-1"
 
 source = {
-   url = "git://github.com/alexames/musica.git",
+   url = "git+https://github.com/alexames/musica.git",
    tag = "v0.1.0",
 }
 

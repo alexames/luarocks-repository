@@ -3,7 +3,7 @@ package = "lua-midi"
 version = "1.0.0-1"
 
 source = {
-   url = "git://github.com/alexames/lua-midi.git",
+   url = "git+https://github.com/alexames/lua-midi.git",
    tag = "v1.0.0",
 }
 
